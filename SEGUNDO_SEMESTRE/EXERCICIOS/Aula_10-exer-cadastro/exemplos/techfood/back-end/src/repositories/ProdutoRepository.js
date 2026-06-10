@@ -17,6 +17,10 @@ class ProdutoRepository {
         const [mostrarProduto] = await pool.query('SELECT * FROM produto WHERE id = ?', [id])
         return mostrarProduto[0] // Retorna o objeto do produto ou undefined
     } 
+
+    async findById (id) {
+        return this.buscarProdutoPorId(id)
+    } 
     
     async cadastrarProduto (dadosDoProduto) {
         const [resultadoCadastroDeProduto] = await pool.query('INSERT INTO produto SET ?', [dadosDoProduto])

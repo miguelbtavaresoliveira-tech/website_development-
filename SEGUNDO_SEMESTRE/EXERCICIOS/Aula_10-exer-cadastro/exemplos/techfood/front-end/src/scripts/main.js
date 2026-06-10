@@ -65,11 +65,10 @@ async function renderizarCardapio() {
       card.classList.add("card");
       card.setAttribute("data-id", produto.id); // ID do banco
 
-      // Aula 10: upload de imagens — descomentar as duas linhas abaixo quando
-      // o back-end tiver a rota de upload ativa e a pasta src/images/ populada.
-      // const imgSrc = produto.imagem ? `src/images/${produto.imagem}` : "src/images/espaguete.png";
+      // Aula 10: upload de imagens — usando caminho estático servido pelo backend
+      const imgSrc = produto.imagem_url ? `${BASE_URL}/${produto.imagem_url}` : "src/images/espaguete.png";
       card.innerHTML =
-        // `<img src='${imgSrc}' alt='${produto.nome}'>` +  // Aula 10
+        `<img src='${imgSrc}' alt='${produto.nome}'>` +
         `<h3>${produto.nome}</h3>` +
         `<p class='desc'>${produto.descricao}</p>` +
         `<div class='quantidade-box'>` +
