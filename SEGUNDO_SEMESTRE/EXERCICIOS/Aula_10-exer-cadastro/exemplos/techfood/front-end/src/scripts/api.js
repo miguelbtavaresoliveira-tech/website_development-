@@ -131,37 +131,3 @@ async function atualizarStatusPedido(id, novoStatus) {
 }
 
 
-// ─────────────────────────────────────────────────────────────────────────────
-// cadastrarProduto(formData)
-// POST /produtos — Envia um novo prato com foto para o banco de dados.
-//
-// ⚠ MULTIPART VS JSON — REGRA DE OURO DO UPLOAD:
-//   Para enviar textos simples, usamos JSON.stringify() e o cabeçalho 
-//   "Content-Type": "application/json".
-//   PORÉM, arquivos binários (como fotos e imagens) NÃO podem ser transformados 
-//   em texto JSON puro facilmente.
-//
-//   Solução: Usamos o objeto FormData(). Ele empacota o arquivo e os textos em
-//   blocos separados (multipart/form-data).
-//
-//   NOTAR: Nunca escreva o cabeçalho "Content-Type" manualmente ao enviar um FormData.
-//   O próprio navegador calcula as bordas de separação do arquivo e injeta
-//   o cabeçalho correto com o código de segurança (boundary) automaticamente.
-// ─────────────────────────────────────────────────────────────────────────────
-async function cadastrarProduto(formData) {
-  // Faz o disparo para a rota do back-end interceptada pelo middleware Multer
-  const response = await fetch(`${BASE_URL}/produtos`, {
-    method: "POST",
-    body: formData, // Enviamos o objeto FormData completo, sem converter para string!
-  });
-
-  // Padrão do slide: Lê o JSON antes de checar se a resposta deu certo
-  const dados = await response.json();
-
-  // Captura erros customizados vindos do back-end (ex: formato de imagem inválido)
-  if (!response.ok) {
-    throw new Error(dados.mensagem || dados.erro || `Erro ${response.status}`);
-  }
-
-  return dados; // Retorna o objeto de sucesso enviado pelo servidor
-}
