@@ -6,7 +6,7 @@
                  deletarPedido(), atualizarStatusPedido().
                  BASE_URL centralizada — trocar uma linha muda todo o projeto.
                  Padrão: ler JSON antes do response.ok → usa dados.erro do servidor.
-   [ ] Aula 10 — cadastrarProduto(dados) — POST /produtos.
+   [✔] Aula 10 — cadastrarProduto(dados) — POST /produtos.
                  Integração com cadastro.js: pratos salvos pelo admin
                  vão para o banco e aparecem no cardápio via buscarProdutos().
    [ ] Futuro  — editarProduto(id, dados) — PUT /produtos/:id.
@@ -130,4 +130,22 @@ async function atualizarStatusPedido(id, novoStatus) {
   return dados;
 }
 
-
+// ─────────────────────────────────────────────────────────────────────────────
+// cadastrarProduto(formData)
+// POST /produtos — envia um novo produto para o servidor.
+//
+// Recebe um FormData (com campos de texto + arquivo de imagem).
+// ⚠ NÃO definir Content-Type manualmente! O navegador precisa gerar
+//    o boundary do multipart/form-data automaticamente.
+//    Se você setar "application/json" ou "multipart/form-data" na mão,
+//    o servidor não vai conseguir ler o corpo da requisição.
+// ─────────────────────────────────────────────────────────────────────────────
+async function cadastrarProduto(formData) {
+  const response = await fetch(`${BASE_URL}/produtos`, {
+    method: "POST",
+    body: formData,   // FormData vai como multipart — sem headers manuais!
+  });
+  const dados = await response.json();
+  if (!response.ok) throw new Error(dados.mensagem || dados.erro || `Erro ${response.status}`);
+  return dados;
+}

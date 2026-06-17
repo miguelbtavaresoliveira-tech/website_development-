@@ -1,25 +1,11 @@
 /* ==========================================================================
    CADASTRO.JS — Lógica da tela de inserção de novos produtos. 
-
-   ROADMAP DESTE ARQUIVO:
-   [✔] Aula 7  — Manipulação do DOM: Captura de inputs do formulário.
-   [✔] Aula 8  — UX/UI: Sistema de Pré-visualização (Preview) de Imagem local.
-   [✔] Aula 10 — Integração Assíncrona: Consumo da função cadastrarProduto()
-                 da camada api.js usando blocos try/catch/finally.
-   [ ] Futuro  — Validação Avançada: Bloqueio de tamanho máximo de arquivo (ex: 2MB)
-                 para evitar sobrecarga no servidor de armazenamento.
-
-   Depende de api.js carregado previamente no escopo global do HTML.
    ========================================================================== */
 
 // ─────────────────────────────────────────────────────────────────────────────
 // MAPEAMENTO GLOBAL DOS ELEMENTOS DO DOM
-// Centralizar as buscas por IDs no topo evita processamento repetido do navegador.
 // ─────────────────────────────────────────────────────────────────────────────
 const form = document.querySelector('.form-produto');
-const inputNome = document.getElementById('produto-nome');
-const inputPreco = document.getElementById('produto-preco');
-const inputDescricao = document.getElementById('produto-descricao');
 const inputImagem = document.getElementById('produto-image');
 const btnSubmit = document.getElementById('btn-submit');
 
@@ -30,77 +16,72 @@ const feedbackSection = document.getElementById('feedbackSection');
 const produtoOut = document.getElementById('produtoOut');
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SISTEMA DE PREVIEW DE IMAGEM
-// Monitora a escolha do arquivo para renderizar na tela antes de fazer o upload.
+// SISTEMA DE PREVIEW DE IMAGEM (ATUALIZADO PARA ALTA PERFORMANCE)
 // ─────────────────────────────────────────────────────────────────────────────
 inputImagem.addEventListener('change', () => {
-    const arquivo = inputImagem.files[0]; // Captura o primeiro arquivo selecionado da lista
+    const arquivo = inputImagem.files[0];
 
     if (arquivo) {
-        // O FileReader() é uma API nativa do navegador que lê arquivos locais
-        // do computador do usuário de forma assíncrona, sem gastar internet.
-        const reader = new FileReader();
-
-        // Evento gatilho: roda assim que o navegador terminar de ler o arquivo em memória
-        reader.onload = (e) => {
-            imagePreview.src = e.target.result; // O arquivo lido vira uma string no formato Base64 DataURL
-            imagemPreviewBox.classList.remove('oculta'); // Remove a classe que escondia a caixa
-        };
-
-        // Solicita ao sistema operacional a leitura do arquivo para conversão de exibição
-        reader.readAsDataURL(arquivo);
+        // screateObjectURL cria um link temporário na memória local do navegador.
+        // É instantâneo, não exige eventos assíncronos (onload) e consome quase zero memória.
+        imagePreview.src = URL.createObjectURL(arquivo);
+        imagemPreviewBox.classList.remove('oculta');
     } else {
-        // Caso o usuário abra a janela de seleção e clique em "Cancelar"
         limparPainelPreview();
     }
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// CAPTURA DO FORMULÁRIO E ENVIO ASSÍNCRONO
+// CAPTURA DO FORMULÁRIO E ENVIO ASSÍNCRONO (ATUALIZADO PARA ESCALABILIDADE)
 // ─────────────────────────────────────────────────────────────────────────────
 form.addEventListener('submit', async (event) => {
-    event.preventDefault(); // Detém o comportamento padrão do HTML de recarregar a página
+    event.preventDefault(); 
 
-    // Validação de segurança primária (Front-end defensive design)
-    if (!inputNome.value.trim() || !inputPreco.value || !inputDescricao.value.trim()) {
-        alert('Por favor, preencha todos os campos obrigatórios.');
-        return;
-    }
-
+    // Validação da imagem isolada
     if (!inputImagem.files[0]) {
-        alert('Por favor, selecione uma foto para o prato.');
+        alert('Por favor, selecione uma foto para o produto.');
         return;
     }
 
     try {
-        // Bloqueio de Segurança contra Duplo Clique:
-        // Evita que usuários ansiosos cliquem 5 vezes seguidas e dupliquem o item no MySQL
+        // Bloqueio de Segurança contra Duplo Clique
         btnSubmit.disabled = true;
         btnSubmit.innerHTML = 'Cadastrando... ⏳';
 
-        // Criação do contêiner FormData necessário para envios Multipart
-        const formData = new FormData();
-        formData.append('nome', inputNome.value.trim());
-        formData.append('preco', inputPreco.value);
-        formData.append('descricao', inputDescricao.value.trim());
-        formData.append('imagem', inputImagem.files[0]); // Chave "imagem" combinada com o upload.single('imagem') do back-end
+        // MUDANÇA: Passando o 'form' diretamente, o JS captura automaticamente 
+        // TODOS os inputs que possuem o atributo 'name' no HTML. 
+        // Exemplo no HTML: <input type="text" name="nome" id="produto-nome">
+        const formData = new FormData(form);
 
-        // Consome a função assíncrona declarada na camada de rede (api.js)
+        // MUDANÇA INTELIGENTE: Varre todos os dados capturados.
+        // Se o dado for um texto (string), ele aplica o .trim() para remover espaços.
+        // Assim, você não precisa fazer isso manualmente um por um!
+        for (let [key, value] of formData.entries()) {
+            if (typeof value === 'string') {
+                formData.set(key, value.trim());
+            }
+        }
+
+        // Validação genérica: garante que nenhum texto ficou vazio após o trim
+        if (!formData.get('nome') || !formData.get('preco') || !formData.get('descricao')) {
+            alert('Por favor, preencha todos os campos obrigatórios.');
+            return; // Interrompe a execução antes de chamar a API
+        }
+
+        // Consome a função assíncrona (api.js) enviando o formData automatizado
         const respostaServidor = await cadastrarProduto(formData);
 
-        // Se chegou aqui, a resposta foi de sucesso (Status 200/21)
-        exibirCardSucesso(respostaServidor);
+        // Exibe o card passando o formData para que ele saiba quais dados foram enviados
+        exibirCardSucesso(respostaServidor, formData);
         
-        // Reseta o formulário para os valores padrão de fábrica
+        // Reseta tudo
         form.reset();
         limparPainelPreview();
 
     } catch (erro) {
-        // Tratamento centralizado de exceções: exibe a mensagem tratada vinda do servidor
         console.error('Falha na operação de cadastro:', erro);
         alert(`Falha no cadastro: ${erro.message}`);
     } finally {
-        // Bloco obrigatório: Restaura o botão para uso futuro, dando certo ou dando errado
         btnSubmit.disabled = false;
         btnSubmit.innerText = 'Cadastrar Produtos';
     }
@@ -111,35 +92,35 @@ form.addEventListener('submit', async (event) => {
 // ─────────────────────────────────────────────────────────────────────────────
 
 /**
- * Constrói dinamicamente o painel de confirmação visual com dados da API
- * @param {Object} resposta Dados devolvidos pelo banco de dados após a inserção
+ * Constrói o painel de confirmação visual
+ * @param {Object} resposta Dados devolvidos pelo servidor
+ * @param {FormData} dadosEnviados Os dados validados que acabaram de ser enviados
  */
-function exibirCardSucesso(resposta) {
+function exibirCardSucesso(resposta, dadosEnviados) {
     feedbackSection.classList.remove('oculto');
     
-    // Formata o número bruto em padrão monetário brasileiro (R$ XX,XX)
-    const precoFormatado = Number(inputPreco.value).toLocaleString('pt-BR', {
+    // MUDANÇA: Agora pegamos o valor direto do formData, que já passou pelo .trim()
+    const precoFormatado = Number(dadosEnviados.get('preco')).toLocaleString('pt-BR', {
         style: 'currency',
         currency: 'BRL'
     });
 
-    // Injeta a estrutura de feedback customizada
+    // MUDANÇA: HTML mais limpo. Recomendo criar as classes 'card-sucesso' e 'texto-sucesso' no seu arquivo CSS.
     produtoOut.innerHTML = `
-        <div style="padding: 15px; border-left: 5px solid #27ae60; background: #f9fefb; margin-top: 15px; border-radius: 4px;">
-            <p style="margin-bottom: 5px; color: #27ae60;"><strong>✔️ ${resposta.mensagem || 'Produto salvo com sucesso!'}</strong></p>
-            <p style="margin: 3px 0;"><strong>Item:</strong> ${inputNome.value.trim()}</p>
-            <p style="margin: 3px 0;"><strong>Valor cadastrado:</strong> ${precoFormatado}</p>
+        <div class="card-sucesso">
+            <p class="texto-sucesso"><strong>✔️ ${resposta.mensagem || 'Produto salvo com sucesso!'}</strong></p>
+            <p><strong>Item:</strong> ${dadosEnviados.get('nome')}</p>
+            <p><strong>Valor cadastrado:</strong> ${precoFormatado}</p>
         </div>
     `;
 
-    // Efeito sênior: Rola a viewport até a caixinha de sucesso de forma suave
     feedbackSection.scrollIntoView({ behavior: 'smooth' });
 }
 
-/**
- * Reseta o elemento visual da imagem de prévia
- */
 function limparPainelPreview() {
+    // MUDANÇA: Boa prática para liberar a memória cache gerada pelo createObjectURL
+    if (imagePreview.src) URL.revokeObjectURL(imagePreview.src);
+    
     imagePreview.src = '';
     imagemPreviewBox.classList.add('oculta');
 }
