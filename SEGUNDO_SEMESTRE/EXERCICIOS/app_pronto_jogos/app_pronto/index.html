@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+  <title>Minha Lista de Jogos</title>
+</head>
+<body>
+
+  <header id="topo">
+    <h1>🎮 Lista de Jogos do(a) ALUNO</h1>
+    <p>Cadastre os jogos que você já jogou e dê sua nota.</p>
+  </header>
+
+  <main>
+    <section id="secao-cadastro">
+      <h2>Cadastrar novo jogo</h2>
+
+      <form id="form-jogo">
+        <label for="input-titulo">Título</label>
+        <input type="text" id="input-titulo" required />
+
+        <label for="input-produtora">Produtora</label>
+        <input type="text" id="input-produtora" required />
+
+        <label for="input-nota">Nota (1 a 5)</label>
+        <input type="number" id="input-nota" min="1" max="5" required />
+
+        <!--
+          ⚠ FUNCIONALIDADE 1 — Adicionar AQUI o campo "Plataforma"
+             (label + input). Veja a prova para detalhes.
+        -->
+
+
+        <label for="input-comentario">Comentário</label>
+        <textarea id="input-comentario" rows="3" required></textarea>
+
+        <button type="submit">Adicionar jogo</button>
+      </form>
+    </section>
+
+    <section id="secao-lista">
+      <h2>Meus jogos</h2>
+
+      <!--
+        ⚠ FUNCIONALIDADE 2 — Adicionar AQUI um parágrafo <p>
+           com id="contador" para mostrar quantos jogos existem.
+      -->
+
+      <p id="contador"></p>
+
+
+      <ul id="lista-jogos"></ul>
+      <p id="msg-vazio">Você ainda não cadastrou nenhum jogo.</p>
+
+      <!--
+        ⚠ FUNCIONALIDADE 3 — Adicionar AQUI um botão "Limpar Tudo"
+           que apaga todos os jogos (com confirmação).
+           Use id="btn-limpar".
+      -->
+           <button id="btn-limpar">Limpar tudo</button>
+
+
+    </section>
+  </main>
+
+  <footer>
+    <p>Somativa 2 — SENAI Itu — 2026</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
