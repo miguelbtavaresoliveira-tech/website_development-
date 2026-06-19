@@ -44,12 +44,12 @@ function configurarFormulario() {
    3) SALVAR JOGO NO LOCALSTORAGE
    ============================================================ */
 function salvarJogo(jogo) {
-  const lista = JSON.stringify(localStorage.getItem("CHAVE_STORAGE") || "[]");
+  const lista = JSON.parse(localStorage.getItem(CHAVE_STORAGE) || "[]");
   lista.push(jogo);
 
   // 🐛 ATENÇÃO: tem um bug aqui que faz os jogos "sumirem" ao recarregar.
   //    Teste cadastrando um jogo e atualizando a página (F5).
-  localStorage.setItem("CHAVE_STORAGE", JSON.stringify(lista));
+  localStorage.setItem(CHAVE_STORAGE, JSON.stringify(lista));
 }
 
 
@@ -57,7 +57,7 @@ function salvarJogo(jogo) {
    4) MOSTRAR OS JOGOS NA TELA
    ============================================================ */
 function renderizarJogos() {
-  const lista = JSON.stringify(localStorage.getItem("CHAVE_STORAGE")) || "[]";
+  const lista = JSON.parse(localStorage.getItem(CHAVE_STORAGE)) || [];
   const ul = document.querySelector("#lista-jogos");
   const msgVazio = document.querySelector("#msg-vazio");
 
@@ -71,13 +71,13 @@ function renderizarJogos() {
 
   lista.forEach(function (jogo, indice)  {
     const li = document.createElement("li");
-    msgVazio.innerHTML = `
+    li.innerHTML = `
       <strong>${jogo.titulo}</strong>
       <div class="meta">Produtora: ${jogo.produtora} • Nota: ${jogo.nota}/5</div>
       <div class="comentario">"${jogo.comentario}"</div>
-      <button id="btn-excluir" data-index="${indice}">Excluir</button>
+      <button class="btn-excluir" data-index="${indice}">Excluir</button>
     `;
-    li.appendChild
+  
     ul.appendChild(li);
   });
 }
@@ -90,7 +90,7 @@ document.querySelector("#lista-jogos").addEventListener("click", function (event
 
   // 🐛 ATENÇÃO: tem um bug aqui. O botão Excluir não funciona.
   //    Olhe com atenção como o botão é criado no innerHTML acima (função 4).
-  if (event.target.id === "btn-excluir") {
+  if (event.target.classList.contains("btn-excluir")) {
     const indice = event.target.getAttribute("data-index");
     excluirJogo(indice);
   }
