@@ -1,0 +1,342 @@
+/* ==========================================================================
+   1. VARIÁVEIS E CONFIGURAÇÕES BASE
+   ========================================================================== */
+:root {
+  --cor-primaria: #2c3e50;
+  --cor-destaque: #e67e22;
+  --cor-sucesso: #27ae60;
+  --cor-fundo: #f4f6f7;
+  --cor-card: #ffffff;
+  --cor-texto: #333333;
+  --cor-borda: #dddddd;
+  --radius: 8px;
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ==========================================================================
+   2. HEADER, MENU & TOPO DA LOJA
+   ========================================================================== */
+#topo-loja {
+  background-color: var(--cor-primaria);
+  color: white;
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  width: 100%;
+}
+
+#titulo-site {
+  font-size: 1.8rem;
+  margin-bottom: 5px;
+}
+
+#boas-vindas {
+  font-size: 1rem;
+  color: #bdc3c7;
+  margin-bottom: 15px;
+}
+
+#bt_menu,
+#label-menu {
+  display: none;
+}
+
+#menu ul {
+  list-style: none;
+  margin-top: 10px;
+  padding: 0;
+}
+
+#menu li {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+#menu a {
+  color: #f1c40f;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+#menu a:hover, 
+#menu a.menu-ativo {
+  color: var(--cor-destaque) !important;
+}
+
+/* ==========================================================================
+   3. CONTAINER CENTRAL & FORMULÁRIO DE CADASTRO
+   ========================================================================== */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: var(--cor-card);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+main header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+main header h1 {
+  color: var(--cor-primaria);
+  font-size: 1.6rem;
+  margin-bottom: 8px;
+}
+
+main header p {
+  color: #7f8c8d;
+  font-size: 0.95rem;
+}
+
+/* Estrutura dos Campos (O conceito do form-group) */
+.form-produto {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-linha {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+label {
+  font-weight: bold;
+  color: var(--cor-primaria);
+  font-size: 0.9rem;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"] {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  transition: var(--transition);
+  background-color: #fafafa;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: var(--cor-destaque);
+  background-color: #fff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+}
+
+/* Customização do Input de Arquivo */
+input[type="file"] {
+  background: #fff;
+  cursor: pointer;
+}
+
+#produto-descricao {
+    height: 100px;
+}
+
+
+/* Pré-visualização da Imagem */
+#imagemPreviewBox {
+  margin-top: 10px;
+  padding: 10px;
+  border: 2px dashed var(--cor-borda);
+  border-radius: var(--radius);
+  text-align: center;
+  background: #fdfdfd;
+}
+
+#imagePreview {
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+/* Botão de Envio */
+#btn-submit {
+  background-color: var(--cor-destaque);
+  color: white;
+  border: none;
+  padding: 14px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 10px;
+}
+
+#btn-submit:hover {
+  background-color: #d35400;
+  transform: translateY(-1px);
+}
+
+#btn-submit:active {
+  transform: translateY(0);
+}
+
+/* Estados Visuais Auxiliares */
+.oculta, .oculto {
+  display: none !important;
+}
+
+/* ==========================================================================
+   4. MODAL DE BOAS-VINDAS & FEEDBACK
+   ========================================================================== */
+#modal-boas-vindas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-bv-conteudo {
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+}
+
+.modal-bv-conteudo h2 {
+  color: var(--cor-primaria);
+  margin-bottom: 10px;
+}
+
+.modal-bv-conteudo input {
+  margin: 15px 0;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--radius);
+}
+
+.modal-bv-conteudo button {
+  background: var(--cor-sucesso);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+  width: 100%;
+}
+
+#feedbackSection {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #e8f8f5;
+  border: 1px solid var(--cor-sucesso);
+  border-radius: var(--radius);
+}
+
+#feedbackSection h2 {
+  color: var(--cor-sucesso);
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+}
+
+/* ==========================================================================
+   5. RODAPÉ (FOOTER)
+   ========================================================================== */
+#rodape {
+  background: var(--cor-primaria);
+  color: white;
+  padding: 30px 20px;
+  text-align: center;
+  margin-top: auto;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+#rodape .info-footer p {
+  margin-bottom: 4px;
+}
+
+#data-hora-footer {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: #bdc3c7;
+}
+
+/* ==========================================================================
+   6. RESPONSIVIDADE (MOBILE)
+   ========================================================================== */
+@media screen and (max-width: 600px) {
+  main {
+    margin: 15px;
+    padding: 20px;
+  }
+
+  #label-menu {
+    display: block;
+    font-size: 2rem;
+    color: #f1c40f;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    user-select: none;
+  }
+
+  #menu ul {
+    display: none;
+    margin-top: 20px;
+  }
+
+  #bt_menu:checked ~ #menu ul {
+    display: block;
+    padding: 8px 0;
+  }
+
+  #menu li {
+    display: block;
+    margin: 0;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  #menu li:last-child {
+    border-bottom: none;
+  }
+}

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="src/styles/global.css" />
+    <link rel="stylesheet" href="src/styles/cadastro.css" />
+    <title>TechFood - Sabor & Saber</title>
+  </head>
+  <body>
+    
+    <div id="modal-boas-vindas" style="display: none">
+      <div class="modal-bv-conteudo">
+        <h2>👋 Bem-vindo ao TechFood!</h2>
+        <p>Como podemos te chamar?</p>
+        <input
+          type="text"
+          id="input-nome-cliente"
+          placeholder="Digite seu nome..."
+          maxlength="30"
+        />
+        <button id="btn-confirmar-nome">Confirmar</button>
+      </div>
+    </div>
+
+    <header id="topo-loja">
+      <h1 id="titulo-site">TechFood - Sabor & Saber</h1>
+      <p id="boas-vindas">Carregando...</p>
+
+      <input type="checkbox" id="bt_menu" />
+      <label for="bt_menu" id="label-menu" aria-label="Abrir menu"
+        >&#9776;</label
+      >
+
+      <nav id="menu">
+        <ul>
+          <li><a href="index.html">Cardápio</a></li>
+          <li><a href="pedidos.html">Meus Pedidos</a></li>
+          <li><a href="cadastro.html">Cadastrar Prato</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+
+        <header>
+            <h1>Cadastrar Produto TechFood</h1>
+            <p>Cadastre seus produtos agora!!</p>
+        </header>
+
+        <form class="form-produto">
+            <div id="label-agrupar">
+                <label for="produto-nome">Nome do Produto</label>
+                <input type="text" id="produto-nome" name="nome" placeholder="Lasanha a Bolonhesa">
+            </div>
+
+            <div class="form-linha">
+                <div id="label-agrupar">
+                    <label for="produto-preco">Preço(R$)</label>
+                    <input type="number" id="produto-preco" name="preco" placeholder="0,00">
+                </div>
+            </div>
+
+            <div id="label-agrupar">
+                <label for="produto-descricao">Descrição</label>
+                <input type="text" id="produto-descricao" name="descricao" placeholder="Uma Lasanha deliciosa, feita com passata de tomate...">
+            </div>
+            
+            <div id="label-agrupar">
+                <label for="produto-image">Inserir imagem</label>
+                <input type="file" id="produto-image" name="imagem" />
+            
+
+                <div id="imagemPreviewBox" class="oculta">
+                    <img id="imagePreview" src="" alt="Prévia da imagem do produto"/>
+                </div>
+            
+            </div>
+
+            <button type="submit" id="btn-submit">Cadastrar Produtos</button>
+
+        </form>
+
+        <section id="feedbackSection" class="oculto">
+            <h2>Produto Cadastrado</h2>
+            <div id="produtoOut"></div>
+        </section>
+        
+      
+    </main>
+
+    <footer id="rodape">
+      <div class="info-footer">
+        <p><strong>TechFood 2026</strong></p>
+        <p>Escola SENAI Ítalo Bologna - Itu/SP</p>
+        <p>Av. das Nações, 1500</p>
+      </div>
+      <p id="data-hora-footer"></p>
+    </footer>
+
+    <!--
+      Ordem dos scripts — importante:
+      1. global.js → funções compartilhadas (saudação, modal)
+      2. api.js    → funções de fetch (main.js depende delas)
+      3. main.js   → lógica do cardápio
+    -->
+    <script src="src/scripts/global.js"></script>
+    <script src="src/scripts/api.js"></script>
+    <script src="src/scripts/cadastro.js"></script>
+  </body>
+</html>
