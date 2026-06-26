@@ -341,6 +341,10 @@ input[type="file"] {
   }
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/main
 /* Estilo do texto de erro */
 .mensagem-erro {
     color: #e74c3c; /* Vermelho padrão de erro */
@@ -354,6 +358,7 @@ input[type="file"] {
 .input-erro {
     border-color: #e74c3c !important;
     background-color: #fdf2f2 !important; /* Um fundo levemente avermelhado */
+<<<<<<< HEAD
 }
 
 /* Estilizando o campo select para combinar com os inputs */
@@ -374,4 +379,6 @@ select#categoria {
 select.input-erro {
     border-color: #e74c3c;
     background-color: #fceceb;
+=======
+>>>>>>> upstream/main
 }

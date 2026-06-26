@@ -57,15 +57,27 @@ form.addEventListener('submit', async (event) => {
     limparErrosFormulario();
     let temErro = false; // "Bandeira" para saber se paramos o envio
 
+<<<<<<< HEAD
     // 2. Validação da Imagem
     if (!inputImagem.files[0]) {
         // Crie um <span class="mensagem-erro" id="erro-imagem"></span> no seu HTML embaixo do input da imagem
         mostrarErro('produto-image', 'erro-imagem', 'Por favor, selecione uma foto.');
         temErro = true;
+=======
+    limparErrosFormulario()
+    let temErro = false
+
+    // Validação da imagem isolada
+    if (!inputImagem.files[0]) {
+        mostrarErro('produto-image', 'erro-imagem', 'Por favor, selecione uma foto.')
+        temErro = true
+        return;
+>>>>>>> upstream/main
     }
 
     const formData = new FormData(form);
 
+<<<<<<< HEAD
     // 3. Aplica o .trim() para limpar espaços em branco de todos os textos
     for (let [key, value] of formData.entries()) {
         if (typeof value === 'string') {
@@ -111,6 +123,45 @@ form.addEventListener('submit', async (event) => {
         btnSubmit.disabled = true;
         btnSubmit.innerHTML = 'Cadastrando... ⏳';
 
+=======
+        // MUDANÇA INTELIGENTE: Varre todos os dados capturados.
+        // Se o dado for um texto (string), ele aplica o .trim() para remover espaços.
+        // Assim, você não precisa fazer isso manualmente um por um!
+        for (let [key, value] of formData.entries()) {
+            if (typeof value === 'string') {
+                formData.set(key, value.trim());
+            }
+        }
+
+        if (!formData.get('nome')) {
+            mostrarErro('produto-nome', 'erro-nome', 'O nome do produto é obrigatório.')
+            temErro = true
+        }
+
+        const precoBruto = formData.get('preco')
+        const precoNormalizado = precoBruto ? preco.replace(',','.') : ''
+        formData.set('preco', precoNormalizado)
+
+        const precoNumerico = Number(precoNormalizado)
+        if (!precoNumerico || precoNumerico <= 0) {
+            mostrarErro('produto-preco', 'erro-preco', 'Digite um preço válido maior que zero.')
+            temErro = true
+        }
+
+        if (!formData.get('descricao')) {
+            mostrarErro('produto-descricao', 'erro-descricao', 'A descrição é obrigatória')
+            temErro = true
+        }
+
+        if (temErro) return 
+
+    try {
+        // Bloqueio de Segurança contra Duplo Clique
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = 'Cadastrando... ⏳';
+
+        // Consome a função assíncrona (api.js) enviando o formData automatizado
+>>>>>>> upstream/main
         const respostaServidor = await cadastrarProduto(formData);
 
         exibirCardSucesso(respostaServidor, formData);
@@ -141,6 +192,7 @@ function exibirCardSucesso(resposta, dadosEnviados) {
     feedbackSection.classList.remove('oculto');
     
     // MUDANÇA: Agora pegamos o valor direto do formData, que já passou pelo .trim()
+<<<<<<< HEAD
     const precoFormatado = parseFloat(dadosEnviados.get('preco')).toFixed(2).replace('.',',')
 
     // 1. Limpa qualquer card anterior com segurança
@@ -154,6 +206,22 @@ function exibirCardSucesso(resposta, dadosEnviados) {
     const pMensagem = document.createElement('p');
     pMensagem.classList.add('texto-sucesso');
     pMensagem.innerHTML = `<strong>✔️ ${resposta.mensagem || 'Produto salvo com sucesso!'}</strong>`; 
+=======
+    const precoFormatado = Number(dadosEnviados.get('preco')).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+
+    // MUDANÇA: HTML mais limpo. Recomendo criar as classes 'card-sucesso' e 'texto-sucesso' no seu arquivo CSS.
+   produtoOut.textContent = ''
+
+   const cardSucesso = document.createElement('div')
+   cardSucesso.classList.add('card-sucesso')
+
+   const pMensagem = document.createElement('p')
+   pMensagem.classList.add('texto-sucesso')
+   pMensagem.innerHTML = `<strong>✔️ ${resposta.mensagem || 'Produto salvo com sucesso!'}</strong>`; 
+>>>>>>> upstream/main
     // (Podemos usar innerHTML aqui porque a 'resposta.mensagem' vem do NOSSO servidor, não do input do usuário)
 
     // 4. Cria o parágrafo do Nome do Produto (AQUI ESTÁ A SEGURANÇA)
@@ -163,6 +231,10 @@ function exibirCardSucesso(resposta, dadosEnviados) {
     pNome.appendChild(strongNome);
     pNome.appendChild(document.createTextNode(dadosEnviados.get('nome'))); 
 
+<<<<<<< HEAD
+=======
+    
+>>>>>>> upstream/main
     // 5. Cria o parágrafo do Preço
     const pPreco = document.createElement('p');
     const strongPreco = document.createElement('strong');
@@ -170,6 +242,7 @@ function exibirCardSucesso(resposta, dadosEnviados) {
     pPreco.appendChild(strongPreco);
     pPreco.appendChild(document.createTextNode(precoFormatado));
 
+<<<<<<< HEAD
     // Parágrafo categoria
     const pCategoria = document.createElement("p")
     const strongCategoria = document.createElement("strong")
@@ -179,6 +252,10 @@ function exibirCardSucesso(resposta, dadosEnviados) {
 
     // 6. Monta o quebra-cabeça colocando os parágrafos dentro do card, e o card na tela
     cardSucesso.append(pMensagem, pNome, pCategoria, pPreco);
+=======
+    // 6. Monta o quebra-cabeça colocando os parágrafos dentro do card, e o card na tela
+    cardSucesso.append(pMensagem, pNome, pPreco);
+>>>>>>> upstream/main
     produtoOut.appendChild(cardSucesso);
 
     feedbackSection.scrollIntoView({ behavior: 'smooth' });
@@ -192,6 +269,7 @@ function limparPainelPreview() {
     imagemPreviewBox.classList.add('oculta');
 }
 
+<<<<<<< HEAD
 // Função para exibir o erro no campo específico
 function mostrarErro(idInput, idSpan, mensagem) {
     const input = document.getElementById(idInput);
@@ -204,6 +282,18 @@ function mostrarErro(idInput, idSpan, mensagem) {
 
 // Função para limpar todos os erros (chamada sempre que tentamos enviar novamente)
 function limparErrosFormulario() {
+=======
+function mostrarErro (idInput, idSpan, mensagem) {
+    const input = document.getElementById(idInput)
+    const span = document.getElementById(idSpan)
+
+    input.classList.add('input-erro')
+    span.textContent = mensagem
+    span.style.display = 'block'
+}
+
+function limparErrosFormulario(){
+>>>>>>> upstream/main
     document.querySelectorAll('.input-erro').forEach(input => input.classList.remove('input-erro'));
     document.querySelectorAll('.mensagem-erro').forEach(span => span.style.display = 'none');
 }
