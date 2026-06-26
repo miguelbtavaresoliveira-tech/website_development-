@@ -340,3 +340,38 @@ input[type="file"] {
     border-bottom: none;
   }
 }
+
+/* Estilo do texto de erro */
+.mensagem-erro {
+    color: #e74c3c; /* Vermelho padrão de erro */
+    font-size: 0.85rem;
+    margin-top: 4px;
+    font-weight: bold;
+    display: none; /* Começa escondido */
+}
+
+/* Classe aplicada ao input via JavaScript quando há erro */
+.input-erro {
+    border-color: #e74c3c !important;
+    background-color: #fdf2f2 !important; /* Um fundo levemente avermelhado */
+}
+
+/* Estilizando o campo select para combinar com os inputs */
+select#categoria {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc; /* Use a mesma cor de borda dos seus inputs */
+    border-radius: 4px;     /* O mesmo arredondamento dos seus inputs */
+    font-family: inherit;
+    font-size: 16px;
+    background-color: #fff;
+    cursor: pointer;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+/* Quando der erro na validação (borda vermelha) */
+select.input-erro {
+    border-color: #e74c3c;
+    background-color: #fceceb;
+}

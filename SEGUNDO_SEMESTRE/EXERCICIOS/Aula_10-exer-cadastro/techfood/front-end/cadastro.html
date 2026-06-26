@@ -52,23 +52,43 @@
             <div id="label-agrupar">
                 <label for="produto-nome">Nome do Produto</label>
                 <input type="text" id="produto-nome" name="nome" placeholder="Lasanha a Bolonhesa">
+                <span class="mensagem-erro" id="erro-nome"></span>
             </div>
 
             <div class="form-linha">
                 <div id="label-agrupar">
                     <label for="produto-preco">Preço(R$)</label>
                     <input type="number" id="produto-preco" name="preco" placeholder="0,00">
+                    <span class="mensagem-erro" id="erro-preco"></span>
                 </div>
+            </div>
+
+            <div class="form-linha">
+              <div id="label-agrupar">
+                <label for="produto-categoria">Categoria:</label>
+                <select id="categoria" name="categoria" required>
+                  <option value="" disabled selected>Selecione uma categoria...</option>
+                  <option value="Massas">Massas</option>
+                  <option value="Bebidas">Bebidas</option>
+                  <option value="Sobremesas">Sobremesas</option>
+                  <option value="Entradas">Entradas</option>
+                </select>
+                <span class="mensagem-erro" id="erro-categoria">Por favor, selecione uma categoria.</span>
+              </div>
+
             </div>
 
             <div id="label-agrupar">
                 <label for="produto-descricao">Descrição</label>
                 <input type="text" id="produto-descricao" name="descricao" placeholder="Uma Lasanha deliciosa, feita com passata de tomate...">
+                <span class="mensagem-erro" id="erro-descricao"></span>
             </div>
+            
             
             <div id="label-agrupar">
                 <label for="produto-image">Inserir imagem</label>
                 <input type="file" id="produto-image" name="imagem" />
+                <span class="mensagem-erro" id="erro-imagem"></span>
             
 
                 <div id="imagemPreviewBox" class="oculta">

@@ -45,11 +45,22 @@ document.addEventListener("DOMContentLoaded", function () {
 //
 // try/catch: captura erros de rede ou servidor offline e mostra mensagem.
 // ─────────────────────────────────────────────────────────────────────────────
-async function renderizarCardapio() {
-  const grid = document.querySelector("#grid-cardapio");
-  if (!grid) return;
 
-  grid.innerHTML = "<p class='loading'>Carregando cardápio...</p>";
+function exibirSkeletons(grid, quantidade = 6) {
+  grid.innerHTML = ""; // Limpa a grid
+  for (let i = 0; i < quantidade; i++) {
+    const skeleton = document.createElement("div");
+    skeleton.classList.add("card-skeleton");
+    grid.appendChild(skeleton);
+  }
+}
+
+async function renderizarCardapio() {
+  const containercardapio = document.querySelector("#grid-cardapio");
+
+  if (!containercardapio) return;
+
+  exibirSkeletons(containercardapio, 6)
 
   try {
     // ── FETCH API em ação — GET /produtos ────────────────────────────────────
@@ -58,36 +69,68 @@ async function renderizarCardapio() {
     // Se o servidor não estiver rodando, cai direto no catch abaixo.
     const produtos = await buscarProdutos(); // HTTP GET → http://localhost:3000/produtos
 
-    grid.innerHTML = "";
+    containercardapio.innerHTML = ""
 
-    produtos.forEach(function (produto) {
+    
+    const produtosAgrupados = produtos.reduce((acumulator, produto) => {
+      const categoria = produto.categoria || "Outros"
+      if (!acumulator[categoria]) acumulator[categoria] = []
+      acumulator[categoria].push(produto)
+      return acumulator
+    }, {})
+
+
+    const nomesDasCategorias = Object.keys(produtosAgrupados)
+    inicializarFiltros(nomesDasCategorias)
+
+    for (const nomeCategoria in produtosAgrupados) {
+
+      const titulo = document.createElement("h2")
+      const section = document.createElement("section")
+      section.classList.add("categoria-section")
+      titulo.textContent = nomeCategoria
+      
+      const grid = document.createElement("div")
+      grid.classList.add("vitrine-grid")
+
+      const pratosDaCategoria = produtosAgrupados[nomeCategoria]
+
+      pratosDaCategoria.forEach(function (produto) {
       const card = document.createElement("article");
       card.classList.add("card");
-      card.setAttribute("data-id", produto.id); // ID do banco
+      card.setAttribute("data-id", produto.id);
 
-      // Aula 10: upload de imagens — usando caminho estático servido pelo backend
       const imgSrc = produto.imagem_url ? `${BASE_URL}/${produto.imagem_url}` : "src/images/espaguete.png";
       card.innerHTML =
         `<img src='${imgSrc}' alt='${produto.nome}'>` +
         `<h3>${produto.nome}</h3>` +
         `<p class='desc'>${produto.descricao}</p>` +
         `<div class='quantidade-box'>` +
-          `<button class='btn-qtd btn-menos'>-</button>` +
-          `<span class='qtd-valor'>1</span>` +
-          `<button class='btn-qtd btn-mais'>+</button>` +
+        `<button class='btn-qtd btn-menos'>-</button>` +
+        `<span class='qtd-valor'>1</span>` +
+        `<button class='btn-qtd btn-mais'>+</button>` +
         `</div>` +
         `<span class='preco' data-preco='${produto.preco}'>` +
-          `R$ ${parseFloat(produto.preco).toFixed(2).replace(".", ",")}` +
+        `R$ ${parseFloat(produto.preco).toFixed(2).replace(".", ",")}` +
         `</span>` +
         `<button class='btn-pedido'>Pedir Agora</button>`;
 
       grid.appendChild(card);
+      section.appendChild(titulo)
+      section.appendChild(grid)
+      containercardapio.appendChild(section)
     });
+    }
+
+    
+
+    
   } catch (erro) {
     // UX: a grid exibe mensagem de erro — o usuário sabe que o cardápio não
     // carregou e pode recarregar a página. Diferente do botão "Enviar para
     // Cozinha" (que tem retry inline), aqui não há ação além de F5.
-    grid.innerHTML = "<p class='loading erro'>Erro ao carregar o cardápio. Verifique se o servidor está rodando.</p>";
+    containercardapio.innerHTML = "<p class='loading-erro'>Erro ao carregar o cardápio.</p>"
+    console.error("🔍 DETETIVE 4: O erro fatal foi:", erro);
   }
 }
 
@@ -130,7 +173,7 @@ function inicializarVitrine() {
 
     // ── Botão MENOS — idêntico à Aula 8 ─────────────────────────────────────
     if (clicado.classList.contains("btn-menos")) {
-      const box    = clicado.parentElement;
+      const box = clicado.parentElement;
       const spanQtd = box.querySelector(".qtd-valor");
       spanQtd.textContent = Math.max(1, Number(spanQtd.textContent) - 1);
       atualizarPrecoCard(box);
@@ -139,7 +182,7 @@ function inicializarVitrine() {
 
     // ── Botão MAIS — idêntico à Aula 8 ──────────────────────────────────────
     if (clicado.classList.contains("btn-mais")) {
-      const box    = clicado.parentElement;
+      const box = clicado.parentElement;
       const spanQtd = box.querySelector(".qtd-valor");
       spanQtd.textContent = Number(spanQtd.textContent) + 1;
       atualizarPrecoCard(box);
@@ -150,7 +193,7 @@ function inicializarVitrine() {
     if (clicado.classList.contains("btn-pedido")) {
       event.preventDefault();
 
-      const card      = clicado.parentElement;
+      const card = clicado.parentElement;
 
       // ⚠ Aula 9: lê o data-id do card (produto_id do banco)
       // adicionado por renderizarCardapio() — não existe mais data-nome
@@ -167,11 +210,11 @@ function inicializarVitrine() {
 // Aula 8: sem mudanças. Recalcula o preço no card quando muda a quantidade.
 // ─────────────────────────────────────────────────────────────────────────────
 function atualizarPrecoCard(box) {
-  const card          = box.parentElement;
-  const spanPreco     = card.querySelector(".preco");
+  const card = box.parentElement;
+  const spanPreco = card.querySelector(".preco");
   const precoUnitario = parseFloat(spanPreco.getAttribute("data-preco"));
-  const quantidade    = Number(box.querySelector(".qtd-valor").textContent);
-  const total         = precoUnitario * quantidade;
+  const quantidade = Number(box.querySelector(".qtd-valor").textContent);
+  const total = precoUnitario * quantidade;
 
   spanPreco.textContent = `R$ ${total.toFixed(2).replace(".", ",")}`;
   spanPreco.style.color = total > 150 ? "#c0392b" : "#e67e22";
@@ -190,9 +233,9 @@ function atualizarPrecoCard(box) {
 //   para coincidir com o formato que criarPedido() do api.js espera.
 // ─────────────────────────────────────────────────────────────────────────────
 function salvarPedido(produtoId, quantidade, botao) {
-  const card    = botao.parentElement;
-  const nome    = card.querySelector("h3").textContent;
-  const preco   = parseFloat(card.querySelector(".preco").getAttribute("data-preco"));
+  const card = botao.parentElement;
+  const nome = card.querySelector("h3").textContent;
+  const preco = parseFloat(card.querySelector(".preco").getAttribute("data-preco"));
   const subtotal = preco * quantidade;
 
   // Padrão Aula 8: ler → modificar → salvar
@@ -207,15 +250,15 @@ function salvarPedido(produtoId, quantidade, botao) {
   localStorage.setItem("techfood_pedidos", JSON.stringify(lista));
 
   // Feedback visual — igual Aula 8
-  botao.textContent           = "✓ Adicionado!";
+  botao.textContent = "✓ Adicionado!";
   botao.style.backgroundColor = "#27ae60";
 
   atualizarContadorPedidos();
 
   setTimeout(function () {
-    botao.textContent           = "Pedir Agora";
+    botao.textContent = "Pedir Agora";
     botao.style.backgroundColor = "";
-    botao.disabled              = false;
+    botao.disabled = false;
 
     const box = card.querySelector(".quantidade-box");
     if (box) {
@@ -286,3 +329,48 @@ function atualizarContadorPedidos() {
 //     }
 //   });
 // }
+
+
+function inicializarFiltros(categorias) { 
+  const containerFiltros = document.querySelector("#filtros-categoria");
+  if (!containerFiltros) return;
+
+  containerFiltros.innerHTML = "";
+
+  const btnTodos = document.createElement("button");
+  btnTodos.classList.add("btn-filtro", "ativo");
+  btnTodos.textContent = "Todos";
+  btnTodos.setAttribute("data-categoria", "Todos"); // Corrigido
+  containerFiltros.appendChild(btnTodos);
+
+  // Faltava esse loop para criar os botões das categorias que vêm do banco!
+  categorias.forEach(categoria => {
+      const btn = document.createElement("button");
+      btn.classList.add("btn-filtro");
+      btn.textContent = categoria;
+      btn.setAttribute("data-categoria", categoria);
+      containerFiltros.appendChild(btn);
+  });
+
+  containerFiltros.addEventListener("click", function(event) {
+    const clicado = event.target;
+
+    if (!clicado.classList.contains("btn-filtro")) return;
+
+    document.querySelectorAll(".btn-filtro").forEach(b => b.classList.remove("ativo"));
+    clicado.classList.add("ativo");
+
+    const categoriaEscolhida = clicado.getAttribute("data-categoria");
+    const todasAsSecoes = document.querySelectorAll(".categoria-section");
+
+    todasAsSecoes.forEach(secao => {
+      const tituloSecao = secao.querySelector("h2").textContent;
+
+      if (categoriaEscolhida === "Todos" || categoriaEscolhida === tituloSecao) {
+        secao.style.display = "block"; 
+      } else {
+        secao.style.display = "none";
+      }
+    });
+  });
+}
