@@ -1,36 +1,144 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🍔 Minha Hamburgueria
 
-## Getting Started
+Aplicação fullstack de gerenciamento de uma hamburgueria artesanal, construída com **Next.js 16**, **TypeScript** e **MySQL**.
 
-First, run the development server:
+---
+
+## 🚀 Tech Stack
+
+| Camada       | Tecnologia               |
+|--------------|--------------------------|
+| Framework    | Next.js 16 (App Router)  |
+| Linguagem    | TypeScript 5             |
+| Estilização  | Vanilla CSS + Design Tokens |
+| Banco de Dados | MySQL 8 (via mysql2)   |
+| Runtime      | Node.js 20+              |
+
+---
+
+## 📁 Estrutura de Pastas
+
+```
+src/
+├── app/                  # App Router (páginas e API routes)
+│   ├── api/              # API Routes (server-side)
+│   │   ├── pedidos/      # GET /api/pedidos, POST /api/pedidos
+│   │   └── produtos/     # GET /api/produtos
+│   ├── pedidos/          # Página /pedidos
+│   ├── globals.css       # Design system (tokens CSS globais)
+│   ├── layout.tsx        # Layout raiz (Header + Footer)
+│   └── page.tsx          # Página Home (/)
+│
+├── components/
+│   ├── ui/               # Componentes primitivos (Button, Input, Modal…)
+│   ├── layout/           # Header, Footer
+│   └── features/         # Componentes de domínio (PedidoCard, ProdutoCard…)
+│
+├── lib/
+│   ├── db.ts             # Pool de conexão MySQL (só servidor)
+│   └── utils.ts          # Funções utilitárias (formatadores, helpers)
+│
+├── services/             # Camada de acesso a dados (só servidor)
+│   ├── pedidoService.ts
+│   └── produtoService.ts
+│
+├── hooks/                # Custom React Hooks (só cliente)
+│   └── usePedidos.ts
+│
+├── types/                # TypeScript interfaces e types
+│   ├── pedido.ts
+│   ├── produto.ts
+│   └── index.ts          # Barrel de exports
+│
+└── constants/
+    └── index.ts          # Rotas, status, paginação
+```
+
+---
+
+## ⚙️ Setup Local
+
+### 1. Pré-requisitos
+
+- Node.js 20+
+- MySQL 8+ rodando localmente
+
+### 2. Instalar dependências
+
+```bash
+npm install
+```
+
+### 3. Configurar variáveis de ambiente
+
+```bash
+cp .env.example .env.local
+```
+
+Edite o `.env.local` com suas credenciais de banco de dados.
+
+### 4. Criar o banco de dados
+
+```sql
+CREATE DATABASE sua_hamburgueria;
+```
+
+> Rode os scripts SQL da sua migration para criar as tabelas.
+
+### 5. Rodar em desenvolvimento
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Acesse [http://localhost:3000](http://localhost:3000)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠 Scripts Disponíveis
 
-## Learn More
+| Comando         | O que faz                            |
+|-----------------|--------------------------------------|
+| `npm run dev`   | Inicia servidor de desenvolvimento   |
+| `npm run build` | Gera build de produção               |
+| `npm start`     | Inicia servidor de produção          |
+| `npm run lint`  | Executa ESLint no código             |
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🏛️ Convenções do Projeto
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Path Aliases (TypeScript)
 
-## Deploy on Vercel
+Use sempre os aliases configurados no `tsconfig.json`:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```typescript
+// ✅ Correto
+import { Button } from "@/components/ui";
+import { listarPedidos } from "@/services/pedidoService";
+import type { Pedido } from "@/types";
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+// ❌ Evitar
+import { Button } from "../../components/ui/Button";
+```
+
+### Server vs. Client Components
+
+| Arquivo/pasta | Onde roda |
+|---|---|
+| `src/lib/db.ts` | **Somente servidor** |
+| `src/services/` | **Somente servidor** |
+| `src/app/api/` | **Somente servidor** |
+| `src/hooks/` | **Somente cliente** (`"use client"`) |
+| `src/components/ui/` | Ambos (sem "use client" = servidor por padrão) |
+
+---
+
+## 🗂️ API Routes
+
+| Método | Rota             | Descrição                   |
+|--------|------------------|-----------------------------|
+| GET    | `/api/pedidos`   | Lista todos os pedidos      |
+| POST   | `/api/pedidos`   | Cria um novo pedido         |
+| GET    | `/api/produtos`  | Lista todos os produtos     |
+| POST   | `/api/produtos`  | Cria um novo produto        |

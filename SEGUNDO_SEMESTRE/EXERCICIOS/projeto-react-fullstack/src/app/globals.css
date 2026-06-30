@@ -1,26 +1,162 @@
-@import "tailwindcss";
+/* =============================================================================
+   GLOBAL CSS — Design System
+   Tokens, reset e utilitários globais da aplicação
+   ============================================================================= */
 
+/* -------------------------------------------------------------------------- */
+/* 1. Design Tokens (variáveis CSS)                                           */
+/* -------------------------------------------------------------------------- */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Cores primárias */
+  --color-primary: #e67e22;
+  --color-primary-dark: #ca6f1e;
+  --color-primary-light: #f39c12;
+
+  /* Cores de fundo */
+  --color-bg: #ffffff;
+  --color-bg-secondary: #f8f9fa;
+  --color-bg-card: #ffffff;
+
+  /* Cores de texto */
+  --color-text: #1a1a2e;
+  --color-text-secondary: #555555;
+  --color-text-muted: #888888;
+
+  /* Cores de estado */
+  --color-success: #27ae60;
+  --color-error: #e74c3c;
+  --color-warning: #f39c12;
+  --color-info: #2980b9;
+
+  /* Bordas */
+  --color-border: #e5e7eb;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.10);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+  /* Espaçamento */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+
+  /* Tipografia */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 24px;
+  --text-2xl: 32px;
+
+  /* Transições */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+
+  /* Layout */
+  --max-width: 1200px;
+  --header-height: 64px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* Modo escuro automático */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --color-bg: #0f0f13;
+    --color-bg-secondary: #1a1a2e;
+    --color-bg-card: #16213e;
+    --color-text: #f1f1f1;
+    --color-text-secondary: #b0b0b0;
+    --color-text-muted: #777777;
+    --color-border: #2d2d3e;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* -------------------------------------------------------------------------- */
+/* 2. Reset & Base Styles                                                     */
+/* -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 3. Layout Utilities                                                         */
+/* -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.main-content {
+  flex: 1;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  max-width: var(--max-width);
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* -------------------------------------------------------------------------- */
+/* 4. Utilitários de texto                                                    */
+/* -------------------------------------------------------------------------- */
+.text-primary   { color: var(--color-primary); }
+.text-muted     { color: var(--color-text-muted); }
+.text-success   { color: var(--color-success); }
+.text-error     { color: var(--color-error); }
+
+/* -------------------------------------------------------------------------- */
+/* 5. Status badges                                                           */
+/* -------------------------------------------------------------------------- */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+.badge-pendente   { background: #fef3cd; color: #856404; }
+.badge-em_preparo { background: #cce5ff; color: #004085; }
+.badge-pronto     { background: #d4edda; color: #155724; }
+.badge-entregue   { background: #d1ecf1; color: #0c5460; }
+.badge-cancelado  { background: #f8d7da; color: #721c24; }
