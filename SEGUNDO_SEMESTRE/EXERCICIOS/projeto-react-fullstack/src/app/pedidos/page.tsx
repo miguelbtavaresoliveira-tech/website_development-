@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui";
+import { Button } from "@/compo/ui";
 import { useState } from "react";
 
 export default function PedidosPage() {

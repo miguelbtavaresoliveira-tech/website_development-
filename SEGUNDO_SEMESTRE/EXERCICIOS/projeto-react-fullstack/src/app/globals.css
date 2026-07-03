@@ -160,3 +160,132 @@ img, video {
 .badge-pronto     { background: #d4edda; color: #155724; }
 .badge-entregue   { background: #d1ecf1; color: #0c5460; }
 .badge-cancelado  { background: #f8d7da; color: #721c24; }
+
+/* -------------------------------------------------------------------------- */
+/* 6. Estilização da página inicial                                          */
+/* -------------------------------------------------------------------------- */
+.home-page {
+  min-height: 100vh;
+  padding: 3rem 1rem;
+  background: linear-gradient(135deg, #020617 0%, #111827 100%);
+  color: #f8fafc;
+}
+
+.home-shell {
+  max-width: 72rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.home-hero {
+  border: 1px solid #1e293b;
+  border-radius: 1.5rem;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 2rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+}
+
+.home-tag {
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #fbbf24;
+}
+
+.home-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.home-description {
+  margin-top: 1rem;
+  max-width: 42rem;
+  font-size: 1.125rem;
+  line-height: 1.7;
+  color: #cbd5e1;
+}
+
+.product-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.product-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem;
+  border: 1px solid #1f2937;
+  border-radius: 1.25rem;
+  background: #111827;
+  transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(251, 191, 36, 0.5);
+  box-shadow: 0 20px 40px rgba(251, 191, 36, 0.1);
+}
+
+.product-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.product-id {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(245, 158, 11, 0.1);
+  color: #fcd34d;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.product-price {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #34d399;
+}
+
+.product-name {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.product-description {
+  flex: 1;
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #94a3b8;
+}
+
+.product-button {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: #f59e0b;
+  color: #111827;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+.product-button:hover {
+  background: #fbbf24;
+}
