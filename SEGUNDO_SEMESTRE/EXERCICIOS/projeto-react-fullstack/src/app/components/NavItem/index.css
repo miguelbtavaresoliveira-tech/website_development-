@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+nav-item {
+    .nav-link {
+        text-decoration: none;
+        font-size: 16px;
+        color: #c8c8e8;
+        padding: 4px 0px;
+        transition: color 0.3s;
+
+        &.active, &.hover {
+            color: #f7f5ff;
+            border-bottom: 2px solid #7250e9;
+        }
+
+        
+    }
+
+
+}

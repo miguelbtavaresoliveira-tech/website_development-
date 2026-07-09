@@ -1,6 +1,10 @@
+'use client'
+
 import Link from "next/link";
 import { renderToString } from "react-dom/server";
 import NavItem, { NavItemInterface } from "../NavItem";
+import './index.css'
+import { usePathname } from "next/navigation";
 
 
 
@@ -29,17 +33,19 @@ export default function NavBar() {
     }
 ]
 
+const pathName = usePathname();
+
     return (
 
         <header>
             <nav className="navbar">
                 <Link href={`/`}>
-                    <image href="logo.svg" width={20} height={20} />
+                    <image className="logo" href="logo.svg" width={20} height={20} />
                 </Link>
 
                 <ul className="nav-items">
                     {items.map((item, index) => (
-                        <NavItem key={index} url={item.url} label={item.label}/>
+                        <NavItem key={index} url={item.url} label={item.label} isActive={pathName === item.url}/>
                     ))}
                 </ul>
 
