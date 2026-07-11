@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STANDARD_CLIENT
+  PREMIUM_CLIENT
+  ADMIN
+}
+
+enum AccountType {
+  CHECKING
+  SAVINGS
+}
+
+enum TransactionType {
+  PIX
+  TED
+  DEPOSIT
+  PAYMENT
+}
+
+model User {
+  id           String       @id @default(uuid()) @db.VarChar(36)
+  name         String       @db.VarChar(150)
+  email        String       @unique @db.VarChar(150)
+  cpf          String       @unique @db.VarChar(11)
+  passwordHash String       @map("password_hash") @db.VarChar(255)
+  role         Role         @default(STANDARD_CLIENT)
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  accounts     Account[]
+  investments  Investment[]
+
+  @@map("users")
+}
+
+model Account {
+  id            String        @id @default(uuid()) @db.VarChar(36)
+  userId        String        @map("user_id") @db.VarChar(36)
+  accountNumber String        @unique @map("account_number") @db.VarChar(10)
+  balance       Decimal       @default(0.00) @db.Decimal(15, 2)
+  accountType   AccountType   @default(CHECKING) @map("account_type")
+  createdAt     DateTime      @default(now()) @map("created_at")
+
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sentTrans     Transaction[] @relation("SenderAccount")
+  receivedTrans Transaction[] @relation("ReceiverAccount")
+
+  @@map("accounts")
+}
+
+model Transaction {
+  id                String          @id @default(uuid()) @db.VarChar(36)
+  senderAccountId   String?         @map("sender_account_id") @db.VarChar(36)
+  receiverAccountId String?         @map("receiver_account_id") @db.VarChar(36)
+  amount            Decimal         @db.Decimal(15, 2)
+  transactionType   TransactionType @map("transaction_type")
+  description       String?         @db.VarChar(255)
+  createdAt         DateTime        @default(now()) @map("created_at")
+
+  senderAccount     Account?        @relation("SenderAccount", fields: [senderAccountId], references: [id])
+  receiverAccount   Account?        @relation("ReceiverAccount", fields: [receiverAccountId], references: [id])
+
+  @@map("transactions")
+}
+
+model Investment {
+  id            String   @id @default(uuid()) @db.VarChar(36)
+  userId        String   @map("user_id") @db.VarChar(36)
+  assetTicker   String   @map("asset_ticker") @db.VarChar(10)
+  quantity      Decimal  @db.Decimal(10, 4)
+  purchasePrice Decimal  @map("purchase_price") @db.Decimal(15, 2)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("investments")
+}
