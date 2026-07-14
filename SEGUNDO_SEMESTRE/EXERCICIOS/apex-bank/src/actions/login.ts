@@ -3,14 +3,11 @@
 import * as z from 'zod'
 import { signIn } from "@/auth"
 import { AuthError } from "next-auth"
-import { DEFAULT_LOGIN_REDIRECT } from "@/app/api/auth/[...nextauth]/route"
-import { error } from 'next/dist/build/output/log';
+import { isRedirectError } from 'next/dist/client/components/redirect-error'
+import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
+import { LoginSchema } from "@/schemas"
 
-export const LoginSchema = z.object({
-    cpf: z.string().min(11, { message: 'CPF exige 11 caractéres no mínimo. '}).max(11, 'CPF exige 11 caractéres no máximo.'),
 
-    password: z.string().min(8, 'A senha deve conter no mínimo 8 caractéres').max(14, "A senha deve obter 14 caractéres no máximo")
-})
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
     const validationFields = LoginSchema.safeParse(values)
@@ -29,6 +26,10 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         })
 
     } catch (error) {
+        // NextAuth throws a RedirectError on success. We MUST rethrow it for Next.js to handle the redirect.
+        if (isRedirectError(error)) {
+            throw error;
+        }
 
         if (error instanceof AuthError) {
             switch (error.type) {
@@ -39,6 +40,6 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
             }
         }
 
-        throw error
+        throw { error: "Algo deu errado, por favor tente denovo"}
     }
 }

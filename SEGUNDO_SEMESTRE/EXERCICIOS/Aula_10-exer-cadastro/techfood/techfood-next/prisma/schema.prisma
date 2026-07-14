@@ -1,0 +1,81 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model Produto {
+  id            Int               @id @default(autoincrement())
+  nome          String            @db.VarChar(100)
+  descricao     String            @db.Text
+  preco         Decimal           @db.Decimal(10, 2)
+  categoria     String?           @db.VarChar(50)
+  disponivel    Boolean           @default(true)
+  imagem_url    String?           @db.VarChar(255)
+  criado_em     DateTime          @default(now())
+  atualizado_em DateTime          @updatedAt
+  
+  cardapios     CardapioProduto[]
+  itens_pedido  ItemPedido[]
+
+  @@map("produto")
+}
+
+model Cardapio {
+  id            Int               @id @default(autoincrement())
+  nome          String            @db.VarChar(100)
+  descricao     String?           @db.Text
+  disponivel    Boolean           @default(true)
+  criado_em     DateTime          @default(now())
+  atualizado_em DateTime          @updatedAt
+  
+  produtos      CardapioProduto[]
+
+  @@map("cardapio")
+}
+
+model CardapioProduto {
+  cardapio_id Int
+  produto_id  Int
+
+  cardapio    Cardapio @relation(fields: [cardapio_id], references: [id], onDelete: Cascade)
+  produto     Produto  @relation(fields: [produto_id], references: [id], onDelete: Cascade)
+
+  @@id([cardapio_id, produto_id])
+  @@map("cardapio_produto")
+}
+
+model Pedido {
+  id            Int          @id @default(autoincrement())
+  cliente       String?      @db.VarChar(100)
+  status        StatusPedido @default(pendente)
+  total         Decimal      @db.Decimal(10, 2)
+  criado_em     DateTime     @default(now())
+  atualizado_em DateTime     @updatedAt
+  
+  itens         ItemPedido[]
+
+  @@map("pedido")
+}
+
+model ItemPedido {
+  id             Int     @id @default(autoincrement())
+  pedido_id      Int
+  produto_id     Int
+  quantidade     Int
+  preco_unitario Decimal @db.Decimal(10, 2)
+
+  pedido  Pedido  @relation(fields: [pedido_id], references: [id], onDelete: Cascade)
+  produto Produto @relation(fields: [produto_id], references: [id], onDelete: Restrict)
+
+  @@map("item_pedido")
+}
+
+enum StatusPedido {
+  pendente
+  preparo
+  pronto
+  entregue
+}
