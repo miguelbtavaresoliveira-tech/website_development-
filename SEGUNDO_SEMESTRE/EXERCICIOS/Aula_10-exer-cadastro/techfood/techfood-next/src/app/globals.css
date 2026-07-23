@@ -1009,3 +1009,410 @@ select.input-erro {
   color: var(--cor-sucesso);
   margin-bottom: 8px;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   LOGIN — autenticação da equipe
+   ═══════════════════════════════════════════════════════════ */
+
+.login-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--cor-card);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  padding: 36px 32px;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.login-header h1 {
+  color: var(--cor-primaria);
+  font-size: 1.5rem;
+  margin-bottom: 8px;
+}
+
+.login-header p {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.login-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-campo label {
+  font-weight: bold;
+  color: var(--cor-primaria);
+  font-size: 0.85rem;
+}
+
+.login-campo input {
+  padding: 12px 14px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  background: #fafafa;
+  transition: var(--transition);
+}
+
+.login-campo input:focus {
+  border-color: var(--cor-destaque);
+  background: #fff;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+}
+
+.login-btn {
+  background: var(--cor-destaque);
+  color: #fff;
+  border: none;
+  padding: 14px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  margin-top: 4px;
+}
+
+.login-btn:hover:not(:disabled) {
+  background: #d35400;
+}
+
+.login-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.login-erro {
+  background: #fdf2f2;
+  border: 1px solid var(--cor-vermelho);
+  color: var(--cor-vermelho);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+.login-aviso {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #95a5a6;
+  line-height: 1.4;
+}
+
+.btn-header-auth {
+  background: none;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  opacity: 0.8;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  transition: opacity 0.15s;
+}
+
+.btn-header-auth:hover {
+  color: var(--cor-amarelo);
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   AUTENTICAÇÃO DE DOIS FATORES (2FA)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Login — tela de código 2FA */
+.login-2fa-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.login-input-2fa {
+  width: 100%;
+  padding: 16px 14px;
+  border: 2px solid var(--cor-destaque);
+  border-radius: var(--radius);
+  font-size: 1.8rem;
+  font-weight: bold;
+  letter-spacing: 0.5rem;
+  text-align: center;
+  background: #fffbf5;
+  transition: var(--transition);
+  outline: none;
+}
+
+.login-input-2fa:focus {
+  border-color: var(--cor-primaria);
+  box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.12);
+  background: #fff;
+}
+
+.login-btn-voltar {
+  background: none;
+  border: 2px solid var(--cor-borda);
+  color: #7f8c8d;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: var(--transition);
+  width: 100%;
+  margin-top: 4px;
+}
+
+.login-btn-voltar:hover:not(:disabled) {
+  border-color: var(--cor-primaria);
+  color: var(--cor-primaria);
+}
+
+/* Cadastro — seção de segurança */
+.secao-seguranca {
+  margin-top: 40px;
+  padding: 28px;
+  background: #f8f9fa;
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+}
+
+.secao-seguranca h2 {
+  color: var(--cor-primaria);
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+}
+
+.seguranca-desc {
+  color: #7f8c8d;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.seguranca-loading {
+  color: #aaa;
+  font-style: italic;
+  font-size: 0.9rem;
+}
+
+.seguranca-sucesso {
+  background: #e8f8f5;
+  border: 1px solid var(--cor-verde);
+  color: var(--cor-verde);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+.seguranca-erro {
+  background: #fdf2f2;
+  border: 1px solid var(--cor-vermelho);
+  color: var(--cor-vermelho);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+.seguranca-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.seguranca-status--ativo {
+  background: #e8f8f5;
+  border: 1px solid var(--cor-verde);
+  color: var(--cor-verde);
+}
+
+.seguranca-status--inativo {
+  background: #fdf2f2;
+  border: 1px solid #ddd;
+  color: #666;
+}
+
+.btn-2fa-ativar {
+  background: var(--cor-destaque);
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: var(--transition);
+}
+
+.btn-2fa-ativar:hover:not(:disabled) {
+  background: #d35400;
+}
+
+/* Setup QR Code */
+.setup-2fa {
+  margin-top: 20px;
+  padding: 20px;
+  background: #fff;
+  border: 1px solid var(--cor-borda);
+  border-radius: 10px;
+}
+
+.setup-2fa h3 {
+  color: var(--cor-primaria);
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.setup-2fa p {
+  font-size: 0.88rem;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.qr-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 12px 0;
+  padding: 12px;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.setup-2fa-secret {
+  text-align: center;
+  word-break: break-all;
+}
+
+.setup-2fa-secret code {
+  background: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+.form-2fa-codigo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.form-2fa-codigo label {
+  font-size: 0.88rem;
+  font-weight: bold;
+  color: var(--cor-primaria);
+}
+
+.form-2fa-codigo input[type="text"],
+.form-2fa-codigo input[type="password"] {
+  padding: 10px 14px;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--radius);
+  font-size: 1rem;
+  background: #fafafa;
+  transition: var(--transition);
+}
+
+.form-2fa-codigo input:focus {
+  border-color: var(--cor-destaque);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(230, 126, 34, 0.1);
+}
+
+.form-2fa-btns {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-2fa-confirmar {
+  background: var(--cor-verde);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: var(--transition);
+  flex: 1;
+}
+
+.btn-2fa-confirmar:hover:not(:disabled) { background: #219150; }
+.btn-2fa-confirmar:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-2fa-cancelar {
+  background: none;
+  border: 2px solid var(--cor-borda);
+  color: #888;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: var(--transition);
+}
+
+.btn-2fa-cancelar:hover { border-color: #aaa; color: #555; }
+
+/* Desativar 2FA */
+.detalhes-desativar-2fa {
+  margin-top: 16px;
+}
+
+.detalhes-desativar-2fa summary {
+  cursor: pointer;
+  color: var(--cor-vermelho);
+  font-size: 0.88rem;
+  font-weight: bold;
+  padding: 8px 0;
+}
+
+.btn-2fa-desativar {
+  background: var(--cor-vermelho);
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: bold;
+  transition: var(--transition);
+  width: 100%;
+  margin-top: 4px;
+}
+
+.btn-2fa-desativar:hover:not(:disabled) { background: #c0392b; }
+.btn-2fa-desativar:disabled { opacity: 0.6; cursor: not-allowed; }
+

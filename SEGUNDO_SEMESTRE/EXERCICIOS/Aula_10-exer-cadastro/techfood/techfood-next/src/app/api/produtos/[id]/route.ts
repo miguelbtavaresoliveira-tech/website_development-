@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { requireAuth, isAuthError } from '@/lib/auth/require-auth';
 
 export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
@@ -24,6 +25,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 }
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const auth = await requireAuth();
+  if (isAuthError(auth)) return auth;
+
   try {
     const { id } = await params;
     const produtoExistente = await prisma.produto.findUnique({ where: { id: Number(id) } });
@@ -101,6 +105,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 }
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  const auth = await requireAuth();
+  if (isAuthError(auth)) return auth;
+
   try {
     const { id } = await params;
     const produtoExistente = await prisma.produto.findUnique({ where: { id: Number(id) } });

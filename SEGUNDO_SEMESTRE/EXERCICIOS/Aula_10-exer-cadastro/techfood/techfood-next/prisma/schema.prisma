@@ -79,3 +79,23 @@ enum StatusPedido {
   pronto
   entregue
 }
+
+model Usuario {
+  id                  Int      @id @default(autoincrement())
+  nome                String   @db.VarChar(100)
+  email               String   @unique @db.VarChar(150)
+  senha_hash          String   @db.VarChar(255)
+  role                Role     @default(admin)
+  ativo               Boolean  @default(true)
+  two_factor_secret   String?  @db.VarChar(100)
+  two_factor_enabled  Boolean  @default(false)
+  criado_em           DateTime @default(now())
+  atualizado_em       DateTime @updatedAt
+
+  @@map("usuario")
+}
+
+enum Role {
+  admin
+  garcom
+}

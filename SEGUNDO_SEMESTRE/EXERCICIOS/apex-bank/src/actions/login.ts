@@ -1,7 +1,7 @@
 'use server'
 
 import * as z from 'zod'
-import { signIn } from "@/auth"
+/*import { signIn } from "@/auth"*/
 import { AuthError } from "next-auth"
 import { isRedirectError } from 'next/dist/client/components/redirect-error'
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes"
@@ -13,7 +13,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     const validationFields = LoginSchema.safeParse(values)
 
     if (!validationFields.success) {
-        return { error: 'Invalid fields provided! '};
+        return { error: 'Invalid fields provided! ' };
     }
 
     const { cpf, password } = validationFields.data
@@ -34,12 +34,12 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
         if (error instanceof AuthError) {
             switch (error.type) {
                 case 'CredentialsSignin':
-                    return { error: 'Invalid credentials. '}
+                    return { error: 'Invalid credentials. ' }
                 default:
-                    return { error: 'An unexpected authentication error occurred'}
+                    return { error: 'An unexpected authentication error occurred' }
             }
         }
 
-        throw { error: "Algo deu errado, por favor tente denovo"}
+        throw { error: "Algo deu errado, por favor tente denovo" }
     }
 }
